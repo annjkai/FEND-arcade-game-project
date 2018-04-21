@@ -59,15 +59,14 @@ Player.prototype.handleInput = function(e) {
     }
 };
 
-let timerId;
-
+// bounces the player back to start after a short delay once top is reached
 function resetPlayer() {
-    timerId = window.setTimeout(function() {
-        console.log("END");
-        this.x = 200;
-        this.y = 380;
+    timerId = window.setTimeout(function(){
+        player.x = 200;
+        player.y = 380;
     }, 500);
 }
+
 // ensures the player stays within bounds and updates when the player reaches the top
 Player.prototype.update = function() {
     if (this.x < 0) { //stop left side
@@ -80,9 +79,7 @@ Player.prototype.update = function() {
         // the value is -20 so the player ends up at the bottom of the top row
         this.y = -20;
         resetPlayer();
-        //clearTimeout(timerId);
     }
-
 };
 
 Player.prototype.render = function() {
