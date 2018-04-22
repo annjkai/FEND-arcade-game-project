@@ -1,11 +1,14 @@
 // This is the enemy class; it determines what enemies looks like and
 // regulates where they may be located on the canvas
-var Enemy = function(x, y, speed) {
+var Enemy = function(x, y, speed, width, height) {
     // enemy location
     this.x = x;
     this.y = y;
     // enemy speed
     this.speed = speed;
+    // enemy size
+    this.width = width;
+    this.height = height;
     // enemy image
     this.sprite = 'images/enemy-bug.png';
 };
@@ -23,6 +26,9 @@ Enemy.prototype.update = function(dt) {
     if (this.x > 505) {
         this.x = -100;
     }
+
+    // runs the collision function
+    checkCollisions(player, this);
 };
 
 // Draws the enemy on the screen, required method for game
@@ -32,9 +38,14 @@ Enemy.prototype.render = function() {
 
 // This is the player class; it determines what the character looks like and
 // where it is located on the canvas
-var Player = function(x, y) {
-    this.x = 200;
-    this.y = 380;
+var Player = function(x, y, width, height) {
+    // player location
+    this.x = x;
+    this.y = y;
+    // player size
+    this.width = width;
+    this.height = height;
+    // player image
     this.sprite = 'images/char-horn-girl.png';
 };
 
@@ -64,7 +75,9 @@ function resetPlayer() {
     }, 500);
 }
 
-// ensures the player stays within bounds and updates when the player reaches the // top
+/* ensures the player stays within bounds and updates when the player
+ * reaches the top
+ */
 Player.prototype.update = function() {
     if (this.x < 0) { //boundary left side
         this.x = 0;
@@ -85,18 +98,38 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// all enemy objects are located in an array called allEnemies
+/* checks whether enemy & player occupy the same location in space
+ * if they do, the player dies and is reset back to the starting position;
+ * functionality sourced from MDN:
+ * developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+ */
+function checkCollisions(player, Enemy) {
+    if (player.x < Enemy.x + Enemy.width &&
+    player.x + player.width > Enemy.x &&
+    player.y < Enemy.y + Enemy.height &&
+    player.height + player.y > Enemy.y){
+        resetPlayer();
+    }
+}
+
+/* all enemy objects are located in an array called allEnemies
+ * the height for the enemies and the player (83) look arbitrary,
+ * but I set them to the same height as the amount the player moves
+ * so checkCollisions() isn't triggered when the player is sat
+ * right underneath/above a bug
+*/
 const allEnemies = [
-    enemyOne = new Enemy(-100, 60, 100),
-    enemyTwo = new Enemy(-100, 145, 200),
-    enemyThree = new Enemy(-100, 230, 150)
+    enemyOne = new Enemy(-100, 48, 100, 100, 83),
+    enemyTwo = new Enemy(-100, 131, 200, 100, 83),
+    enemyThree = new Enemy(-100, 214, 150, 100, 83)
 ];
 
 // new player object
-player = new Player();
+player = new Player(200, 380, 100, 83);
 
-// listens for key presses and sends the keys to the
-// Player.handleInput() method.
+/* listens for key presses and sends the keys to the Player.handleInput()
+ * method
+ */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
