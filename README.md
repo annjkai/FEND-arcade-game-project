@@ -4,6 +4,8 @@
 
 **Project acceptance date: 23 April 2018**
 
+**[Live preview](http://annikaiser.com/arcade-game/)**
+
 The task for this project was to recreate the famous "Frogger" arcade game using JavaScript. 
 This game was built with [Udacity's](https://github.com/udacity/frontend-nanodegree-arcade-game) starter code, which included a game engine and the visual resources. I used vanilla JavaScript to build out the functionality. The game was designed to adhere to the [project rubric](https://review.udacity.com/#!/rubrics/15/view).
 
